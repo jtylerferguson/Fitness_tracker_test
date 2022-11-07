@@ -7,9 +7,13 @@ async function dropTables() {
   // drop all tables, in the correct order
   try {
     await client.query(`
-    DROP TABLE IF EXISTS users;
+    DROP TABLE IF EXISTS routineactivities;
+    DROP TABLE IF EXISTS routine_activities;
+    DROP TABLE IF EXISTS routines;
+    DROP TABLE IF EXISTS activities;
+    DROP TABLE IF EXISTS users
   `);
-
+console.log("finished dropping tables")
   } catch (error) {
     console.error(error)
   }
@@ -19,12 +23,11 @@ async function createTables() {
   console.log("Starting to build tables...")
   // create all tables, in the correct order
   try {
-    await client.query(`
-    CREATE TABLE users (
+    await client.query(`CREATE TABLE users(
       id SERIAL PRIMARY KEY,
       username varchar(255) UNIQUE NOT NULL,
-      password varchar(255) NOT NULL,
-    )
+      password varchar(255) NOT NULL
+    );
     `);
   } catch (error) {
     console.error(error)

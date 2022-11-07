@@ -65,7 +65,7 @@ describe("DB Users", () => {
       expect(hashedVersion).toBe(true);
     });
 
-    xit("Does NOT return the password", async () => {
+    it("Does NOT return the password", async () => {
       const fakeUserData = {
         username: faker.internet.userName(),
         password: faker.internet.password(),
