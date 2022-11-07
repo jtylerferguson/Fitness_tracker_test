@@ -4,7 +4,7 @@ an API for our new fitness empire, FitnessTrac.kr, using node, express, and post
 ## Getting Started
 Install Packages
 
-    npm i
+    npm i  //done
 
 Initialize Database
 
