@@ -19,6 +19,7 @@ async function addActivityToRoutine(routineId, activityId, duration, count) {
 }
 
 async function getRoutineActivitiesByRoutine({id}) {
+
 }
 
 async function updateRoutineActivity ({id, ...fields}) {
