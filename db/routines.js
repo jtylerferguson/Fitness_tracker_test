@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-catch */
 const client = require('./client');
-
+const {getActivityById, attachActivitiesToRoutines}= require('./')
 async function getRoutineById(routineId) {
    
   const { rows: [ routine ]  } = await client.query(`
@@ -40,13 +40,12 @@ async function getAllRoutines () {
     SELECT id
     FROM routines;`)
    
-
    const routines = await Promise.all(routineIds.map(
     routine => getRoutineById( routine.id)
-    ));
- console.log(routines)
+  ));
+ 
+return routines 
 
-    return routines;
   } catch (error) {
     throw error;
   }
