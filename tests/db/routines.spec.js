@@ -122,7 +122,7 @@ describe("DB Routines", () => {
       expectRoutinesToContainRoutine(routines, fakeRoutine);
     });
 
-    xit("Should include the private routine", async () => {
+    it("Should include the private routine", async () => {
       const routines = await getAllRoutines();
       expectRoutinesToContainRoutine(routines, fakePrivateRoutine);
     });

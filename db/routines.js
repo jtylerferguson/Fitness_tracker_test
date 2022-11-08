@@ -25,7 +25,7 @@ async function getRoutinesWithoutActivities(){
    const routines = await Promise.all(routineIds.map(
     routine => getRoutineById( routine.id)
     ));
- console.log(routines)
+
 
     return routines;
   } catch (error) {
