@@ -29,6 +29,12 @@ async function createTables() {
       password varchar(255) NOT NULL
     );
     `);
+
+    await client.query(` CREATE TABLE activities (
+      id SERIAL PRIMARY KEY,
+      name varchar(255) UNIQUE NOT NULL,
+      description TEXT NOT NULL
+    )`)
   } catch (error) {
     console.error(error)
   }
