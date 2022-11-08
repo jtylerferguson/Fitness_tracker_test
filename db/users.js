@@ -18,7 +18,7 @@ async function createUser ({
     `, [username, password]);
   
 
-  delete user.password
+    delete user.password
   return user
   } catch (error) {
     console.error(error);
@@ -62,14 +62,14 @@ async function getUserByUsername(userName) {
   try {
     const { rows: [user] } = await client.query(`
     SELECT *
-    FROM users
+         FROM users
     WHERE username=$1;
     `, [userName]);
 
-    return user;
+       return user;
   } catch (error) {
     throw error;
-  }
+     }
 }
 
 module.exports = {

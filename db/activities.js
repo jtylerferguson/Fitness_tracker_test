@@ -91,11 +91,11 @@ async function createActivity({
 // don't try to update the id
 // do update the name and description
 // return the updated activity
-async function updateActivity(id, fields ={}) {
-    
-  const { name } = fields;
+async function updateActivity({id, ...fields} ) {
+    console.log(id)
+  const { name, description } = fields;
   console.log(name) 
-  console.log(fields)
+  console.log(description)
   
  
   const setString = Object.keys(fields).map(
