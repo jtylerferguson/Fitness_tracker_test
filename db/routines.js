@@ -146,17 +146,7 @@ try {
 }
 }
 
-// async function destroyRoutine(id) {
-// const {rows: [routines]} = await client.query(`
-// DELETE FROM routines 
-// WHERE id = $1;
-// DELETE FROM routine_activities
-// WHERE "routineId" = $1;
-// `, [id])
 
-// return routines
-
-// }
 async function destroyRoutine(id) {
   try {
      await client.query(`
