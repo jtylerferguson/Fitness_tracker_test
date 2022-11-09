@@ -97,7 +97,6 @@ JOIN users ON routines."creatorId"=users.id
 JOIN routine_activities ON routine_activities."routineId"=routines.id
 WHERE routine_activities."activityId"= $1 AND routines."isPublic"=true
 `, [id])
-console.log(request)
 const  {rows: routines} = request
 const routinesWithActivities= attachActivitiesToRoutines(routines)
 return routinesWithActivities
@@ -115,13 +114,43 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
      `,
     [creatorId, isPublic, name, goal]
   );
-
   return routines;
 }
 
-async function updateRoutine({ id, ...fields }) {}
+async function updateRoutine({ id, ...fields }) {
+const {name, goal} = fields;
+console.log(name)
+console.log(goal)
 
-async function destroyRoutine(id) {}
+const setString = Object.keys(fields).map(
+  (key, index) => `"${ key }"=$${ index + 1 }`
+).join(', ');
+
+
+try {
+
+  if (setString.length > 0) {
+    await client.query(`
+      UPDATE routines
+      SET ${ setString }
+      WHERE id=${ id }
+      RETURNING *;
+    `, Object.values(fields));
+  }
+
+  if (name === undefined) {
+    return await getRoutineById(id);
+  }
+
+  return await getRoutineById(id);
+} catch (error) {
+  throw error;
+}
+}
+
+async function destroyRoutine(id) {
+  
+}
 
 module.exports = {
   getRoutineById,
