@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 const client = require("./client");
 const { attachActivitiesToRoutines } = require("./activities");
+const {getUserByUsername} = require('./users')
 async function getRoutineById(routineId) {
   const {
     rows: [routine],
@@ -49,9 +50,22 @@ async function getAllRoutines() {
   }
 }
 
-async function getAllRoutinesByUser({ username }) {}
+async function getAllRoutinesByUser({ username }) {
+const {id} = await getUserByUsername(username)
+  
+  const {rows} = await client.query(`
+  SELECT routines.*, users.username AS 
+  "creatorName"
+  FROM routines
+  JOIN users ON routines."creatorId"=users.id
+  WHERE "creatorId" = $1
+  `, [id])
+  return attachActivitiesToRoutines(rows)
+}
 
-async function getPublicRoutinesByUser({ username }) {}
+async function getPublicRoutinesByUser({ username }) {
+  
+}
 
 async function getAllPublicRoutines() {
   const { rows } = await client.query(`
@@ -61,8 +75,6 @@ async function getAllPublicRoutines() {
     JOIN users ON routines."creatorId"=users.id
     WHERE "isPublic" = true;`);
 
-
-    
     return attachActivitiesToRoutines(rows)
 }
 
