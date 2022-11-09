@@ -56,6 +56,12 @@ async function getPublicRoutinesByUser({username}) {
 }
 
 async function getAllPublicRoutines() {
+  const {rows} = await client.query(`
+SELECT * 
+FROM routines
+`)
+
+return rows
 }
 
 async function getPublicRoutinesByActivity({id}) {
