@@ -119,8 +119,6 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
 
 async function updateRoutine({ id, ...fields }) {
 const {name, goal} = fields;
-console.log(name)
-console.log(goal)
 
 const setString = Object.keys(fields).map(
   (key, index) => `"${ key }"=$${ index + 1 }`
@@ -148,8 +146,32 @@ try {
 }
 }
 
+// async function destroyRoutine(id) {
+// const {rows: [routines]} = await client.query(`
+// DELETE FROM routines 
+// WHERE id = $1;
+// DELETE FROM routine_activities
+// WHERE "routineId" = $1;
+// `, [id])
+
+// return routines
+
+// }
 async function destroyRoutine(id) {
-  
+  try {
+     await client.query(`
+      DELETE FROM routine_activities
+      WHERE "routineId" = ${id};
+    `);
+    const {rows: [routine]} = await client.query(`
+      DELETE FROM routines
+      WHERE id = ${id}
+      RETURNING *;
+    `);
+    return routine
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 module.exports = {
