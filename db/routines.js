@@ -42,7 +42,6 @@ async function getAllRoutines () {
     FROM routines
     JOIN users ON routines."creatorId"=users.id;`)
    
- 
 return attachActivitiesToRoutines(rows)
 
   } catch (error) {
