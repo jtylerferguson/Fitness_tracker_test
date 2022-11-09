@@ -136,7 +136,7 @@ describe("DB Routines", () => {
       expectRoutineToContainActivity(routine, fakeActivity2);
     });
 
-    xit("should not include a routine more than once", async () => {
+    it("should not include a routine more than once", async () => {
       const routines = await getAllRoutines();
       expectRoutinesNotToContainDuplicates(routines, fakeRoutine);
     });

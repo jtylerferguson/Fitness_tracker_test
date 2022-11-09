@@ -15,7 +15,7 @@ async function addActivityToRoutine({routineId, activityId, duration, count}) {
       ON CONFLICT ("routineId", "activityId") DO NOTHING
       RETURNING *;
     `, [routineId, activityId, duration, count]);
-  console.log(routineActivity, "line 18 routine activities")
+ 
     return routineActivity;
   } catch (error) {
     throw error;
