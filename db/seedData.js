@@ -248,9 +248,9 @@ async function rebuildDB() {
     await createInitialUsers();
     await createInitialActivities();
     await createInitialRoutines();
-    console.log("!!!!!!")
+  
     await createInitialRoutineActivities();
-    console.log("?????")
+  
   } catch (error) {
     console.log("Error during rebuildDB");
     throw error;

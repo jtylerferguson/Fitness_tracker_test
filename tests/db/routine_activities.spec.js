@@ -53,7 +53,7 @@ describe("DB Routine Activities", () => {
   })
 
   describe("getRoutineActivitiesByRoutine", () => {
-    it("should return the routine activities for a routine", async () => {
+   it("should return the routine activities for a routine", async () => {
       const fakeUser = await createFakeUser("Timmy")
       const fakeActivity = await createFakeActivity("Fortnite", "I know it's not exercise")
       const fakeRoutine = await createFakePublicRoutine(fakeUser.id, "Every waking hour", "Until my mom yells at me")
@@ -67,7 +67,7 @@ describe("DB Routine Activities", () => {
   })
 
   describe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
-    it("creates a new routine_activity, and return it", async () => {
+   it("creates a new routine_activity, and return it", async () => {
       const routineActivity = await addActivityToRoutine(
         routineActivityData
       )
@@ -88,7 +88,7 @@ describe("DB Routine Activities", () => {
   })
 
   describe("updateRoutineActivity({ id, count, duration })", () => {
-    it("Finds the routine with id equal to the passed in id. Updates the count or duration as necessary.", async () => {
+   it("Finds the routine with id equal to the passed in id. Updates the count or duration as necessary.", async () => {
       const fakeRoutineActivity = await createFakeRoutineActivity();
 
       const newRoutineActivityData = {

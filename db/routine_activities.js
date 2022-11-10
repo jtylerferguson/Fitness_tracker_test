@@ -3,7 +3,22 @@ const client = require('./client')
 const {getRoutineById, createActivity}  = require("./");
 
 
-async function getRoutineActivityById(id){
+async function getRoutineActivityById(id)
+{ const {
+  rows: [routineActivities],
+} = await client.query(
+  `
+  SELECT *
+  FROM routine_activities
+  WHERE id=$1;
+`,
+  [id]
+);
+if (!routineActivities) {
+  console.log("No routineActivitiess");
+} else {
+  return routineActivities;
+}
 }
 
 async function addActivityToRoutine({routineId, activityId, duration, count}) {
@@ -24,16 +39,71 @@ async function addActivityToRoutine({routineId, activityId, duration, count}) {
 }
 
 async function getRoutineActivitiesByRoutine({id}) {
+  const {rows:routineActivities} = await client.query(`
+  SELECT routine_activities.*
+  FROM routine_activities
+  WHERE "routineId"= $1 
+  `, [id])
 
+  
+  return routineActivities
+  
 }
 
-async function updateRoutineActivity ({id, ...fields}) {
-}
-
+async function updateRoutineActivity({ id, ...fields }) {
+  const {duration, count} = fields;
+  
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+  ).join(', ');
+  
+  
+  try {
+  
+    if (setString.length > 0) {
+      await client.query(`
+        UPDATE routine_activities
+        SET ${ setString }
+        WHERE id=${ id }
+        RETURNING *;
+      `, Object.values(fields));
+    }
+  
+    if (duration === undefined) {
+      return await getRoutineActivityById(id);
+    }
+  
+    return await getRoutineActivityById(id);
+  } catch (error) {
+    throw error;
+  }
+  }
 async function destroyRoutineActivity(id) {
+  try {
+ 
+    const {rows: [routineActivity]} = await client.query(`
+    DELETE FROM routine_activities
+    WHERE id = ${id}
+    RETURNING *;
+  `);
+  return routineActivity
+   
+ } catch (error) {
+   console.error(error)
+ }
 }
 
 async function canEditRoutineActivity(routineActivityId, userId) {
+ 
+  const {rows: [canEdit]} = await client.query(`
+  SELECT routine_activities.* 
+  FROM routine_activities  
+  JOIN routines ON routines."creatorId"=$1
+  WHERE routine_activities.id= $2
+  `, [userId, routineActivityId ])
+  console.log(canEdit, "help")
+if (canEdit){
+  return true}else {return false}
 }
 
 async function attachActivitiesToRoutines(routines) {
