@@ -1,19 +1,9 @@
-const http = require("http");
-const PORT = process.env["PORT"] ?? 3000;
-const express = require("express");
-const chalk = require("chalk");
-const app = require("./app");
-const cors = require('cors');
-const server = http.createServer(app);
+const http = require("http")
+const chalk = require("chalk")
+const app = require("./app")
 
-
-app.use(cors());
-const morgan = require('morgan');
-app.use(morgan('dev'));
-
-app.use(express.json());
-
-
+const PORT = process.env["PORT"] ?? 3000
+const server = http.createServer(app)
 
 server.listen(PORT, () => {
   console.log(
@@ -22,5 +12,3 @@ server.listen(PORT, () => {
     chalk.blueBright("Get your routine on!")
   )
 })
-
- 

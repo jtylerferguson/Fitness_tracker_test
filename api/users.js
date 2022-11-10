@@ -1,10 +1,10 @@
 const express = require('express');
-const router = express.Router();
+const userRouter = express.Router();
 const { getUserByUsername, createUser } = require("../db/users.js");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 // POST /api/users/login
-router.post("/login", async (req, res, next) => {
+userRouter.post("/login", async (req, res, next) => {
     const {username, password} = req.body;
   
     // request must have both
@@ -17,7 +17,7 @@ router.post("/login", async (req, res, next) => {
   
     try {
       const user = await getUserByUsername(username);
-  
+      
       if (user && user.password == password) {
         const token = jwt.sign(
           { id: user.id, username: user.username },
@@ -27,6 +27,7 @@ router.post("/login", async (req, res, next) => {
         const recoveredData = jwt.verify(token, JWT_SECRET);
         res.send({ message: "you're logged in!", token });
         return recoveredData;
+        
         // create token & return to user
       } else {
         next({
@@ -40,7 +41,8 @@ router.post("/login", async (req, res, next) => {
     }
   });
 // POST /api/users/register
-router.post("/register", async (req, res, next) => {
+userRouter.post("/register", async (req, res, next) => {
+ 
     const { username, password } = req.body;
   
     try {
@@ -72,13 +74,14 @@ router.post("/register", async (req, res, next) => {
       res.send({
         message: "thank you for signing up",
         token,
+        user
       });
     } catch ({ name, message }) {
       next({ name, message });
     }
   });
 // GET /api/users/me
-router.get("/me", async (req, res, next) => {
+userRouter.get("/me", async (req, res, next) => {
     try {
       if (req.user) {
         res.send(req.user);
@@ -94,4 +97,4 @@ router.get("/me", async (req, res, next) => {
   });
 // GET /api/users/:username/routines
 
-module.exports = router;
+module.exports = userRouter;
