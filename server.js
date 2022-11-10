@@ -1,16 +1,17 @@
 const http = require("http");
+const PORT = process.env["PORT"] ?? 3000;
 const express = require("express");
 const chalk = require("chalk");
 const app = require("./app");
 const cors = require('cors');
-
 const server = http.createServer(app);
-const PORT = process.env["PORT"] ?? 8080;
-server.use(cors());
-const morgan = require('morgan');
-server.use(morgan('dev'));
 
-server.use(express.json());
+
+app.use(cors());
+const morgan = require('morgan');
+app.use(morgan('dev'));
+
+app.use(express.json());
 
 
 
