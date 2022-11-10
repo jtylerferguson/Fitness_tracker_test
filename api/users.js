@@ -1,13 +1,14 @@
 const express = require('express');
 const userRouter = express.Router();
 const { getUserByUsername, createUser } = require("../db/users.js");
+const {requireUser} = require("./utils")
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 // POST /api/users/login
 userRouter.post("/login", async (req, res, next) => {
     const {username, password} = req.body;
   
-    // request must have both
+   
     if (!username || !password) {
       next({
         name: "MissingCredentialsError",
@@ -25,7 +26,7 @@ userRouter.post("/login", async (req, res, next) => {
           { expiresIn: "7d" }
         );
         const recoveredData = jwt.verify(token, JWT_SECRET);
-        res.send({ message: "you're logged in!", token });
+        res.send({ user, message: "you're logged in!", token });
         return recoveredData;
         
         // create token & return to user
@@ -34,7 +35,7 @@ userRouter.post("/login", async (req, res, next) => {
           name: "IncorrectCredentialsError",
           message: "Username or password is incorrect",
         });
-      }
+      } return user 
     } catch (error) {
       console.log(error);
       next(error);
@@ -46,20 +47,33 @@ userRouter.post("/register", async (req, res, next) => {
     const { username, password } = req.body;
   
     try {
+      if (password.length < 8) {
+        next({
+          name: "Password Short",
+          message: "Password Too Short!",
+          error: "error"
+          
+        });}
+
+
       const _user = await getUserByUsername(username);
   
       if (_user) {
         next({
           name: "UserExistsError",
-          message: "A user by that username already exists",
+          message: `User ${username} is already taken.`,
+          error: "error"
+          
         });
-      }
+      } else {
   
       const user = await createUser({
         username,
         password,
       });
-  
+    
+
+
       const token = jwt.sign(
         {
           id: user.id,
@@ -70,18 +84,20 @@ userRouter.post("/register", async (req, res, next) => {
           expiresIn: "1w",
         }
       );
-  
+    
+   
       res.send({
         message: "thank you for signing up",
         token,
         user
       });
-    } catch ({ name, message }) {
-      next({ name, message });
+    }
+    } catch ({ name, message, error }) {
+      next({ name, message, error });
     }
   });
 // GET /api/users/me
-userRouter.get("/me", async (req, res, next) => {
+userRouter.get("/me", requireUser, async (req, res, next) => {
     try {
       if (req.user) {
         res.send(req.user);

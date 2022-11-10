@@ -24,4 +24,15 @@ apiRouter.use('/routines', routinesRouter);
 const routineActivitiesRouter = require('./routineActivities');
 apiRouter.use('/routine_activities', routineActivitiesRouter);
 
+
+apiRouter.use((error, req, res, next) => {
+    res.send({
+      error: error.name, 
+      name: error.name,
+      message: error.message
+    });
+  });
+
+ 
+
 module.exports = apiRouter;
