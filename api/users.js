@@ -3,6 +3,7 @@ const userRouter = express.Router();
 const { getUserByUsername, createUser } = require("../db/users.js");
 const {requireUser} = require("./utils")
 const jwt = require("jsonwebtoken");
+const { token } = require('morgan');
 const { JWT_SECRET } = process.env;
 // POST /api/users/login
 userRouter.post("/login", async (req, res, next) => {
@@ -103,12 +104,13 @@ userRouter.get("/me", requireUser, async (req, res, next) => {
         res.send(req.user);
       } else {
         next({
-          name: "IncorrectCredentialsError",
-          message: "No me data associated with this token",
+          name: "MissingUserError",
+          message: "You must be logged in to perform this action",
+          error: "MissingUserError"
         });
       }
-    } catch ({ name, message }) {
-      next({ name, message });
+    } catch ({ name, message, error }) {
+      next({ name, message, error });
     }
   });
 // GET /api/users/:username/routines
