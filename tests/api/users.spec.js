@@ -240,7 +240,7 @@ describe("/api/users", () => {
       expect(response.body).toEqual([...routinesFromDB])
     })
 
-    xit("gets a list of all routines for the logged in user", async () => {
+    it("gets a list of all routines for the logged in user", async () => {
       const { fakeUser, token } = await createFakeUserWithRoutines("Angela")
       const response = await request(app)
         .get(`/api/users/${fakeUser.username}/routines`)
