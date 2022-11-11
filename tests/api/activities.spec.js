@@ -83,7 +83,7 @@ describe("/api/activities", () => {
   })
 
   describe("PATCH /api/activities/:activityId (*)", () => {
-    it("Anyone can update an activity (yes, this could lead to long term problems a la wikipedia)", async () => {
+    xit("Anyone can update an activity (yes, this could lead to long term problems a la wikipedia)", async () => {
       const { token } = await createFakeUserWithToken("Allison")
       const fakeActivity = await createFakeActivity(
         "Run in Place",
@@ -108,7 +108,7 @@ describe("/api/activities", () => {
       })
     })
 
-    it("returns an error when updating an activity that does not exist", async () => {
+    xit("returns an error when updating an activity that does not exist", async () => {
       const { token } = await createFakeUserWithToken("Barry")
 
       const newActivityData = {
@@ -124,7 +124,7 @@ describe("/api/activities", () => {
       expectToHaveErrorMessage(response.body, ActivityNotFoundError(10000))
     })
 
-    it("returns an error when changing an activity to have the name of an existing activity", async () => {
+    xit("returns an error when changing an activity to have the name of an existing activity", async () => {
       const { token } = await createFakeUserWithToken("Jane")
       const fakeActivity = await createFakeActivity(
         "Beat Saber",
@@ -154,7 +154,7 @@ describe("/api/activities", () => {
   })
 
   describe("GET /api/activities/:activityId/routines", () => {
-    it("Get a list of all public routines which feature that activity", async () => {
+    xit("Get a list of all public routines which feature that activity", async () => {
       const { fakeRoutines } = await createFakeUserWithRoutines("Allen")
       const fakeActivity = await createFakeActivity(
         "Weight Lifting",
@@ -178,7 +178,7 @@ describe("/api/activities", () => {
       expect(response.body).toEqual(routinesFromDB)
     })
 
-    it("Should return an error when you ask for an activity that does not exist", async () => {
+    xit("Should return an error when you ask for an activity that does not exist", async () => {
       const response = await request(app).get("/api/activities/10000/routines")
 
       expectToHaveErrorMessage(response.body, ActivityNotFoundError(10000))
