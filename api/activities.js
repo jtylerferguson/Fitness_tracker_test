@@ -5,6 +5,7 @@ const {
   createActivity,
   getActivityById,
   getActivityByName,
+  updateActivity
 } = require("../db");
 const { requireUser } = require("./utils");
 const activitiesRouter = express.Router();
@@ -52,5 +53,43 @@ activitiesRouter.post("/", requireUser, async (req, res, next) => {
   }
 });
 // PATCH /api/activities/:activityId
+activitiesRouter.patch('/:activityId', requireUser, async (req, res, next) => {
+    const { activityId } = req.params;
+    console.log(req.params)
+    const { name, description } = req.body;
+
+    const updateFields = {};
+
+    if (name) {
+        updateFields.name = name;
+    }
+
+
+    if (description) {
+        updateFields.description = description;
+    } 
+
+    try {
+        const originalActivity = await getActivityById(activityId);
+
+        if (originalActivity.activityId) {
+
+            const updatedActivity = await updateActivity(activityId, updateFields);
+            res.send({activity: updatedActivity})
+        } else {
+            next ({
+                name: 'UnauthorizedUserError',
+                message: 'You cannot update a activity that is not yours'
+            })
+        }
+    } catch ({ name, message}) {
+        next ({name, message});
+    }
+});
+
+
+
+
+
 
 module.exports = activitiesRouter;
