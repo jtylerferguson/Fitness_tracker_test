@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-catch */
 const client = require("./client");
-const { attachActivitiesToRoutines, getActivityById } = require("./activities");
+const { attachActivitiesToRoutines, } = require("./activities");
 const {getUserByUsername} = require('./users')
 async function getRoutineById(routineId) {
   const {
