@@ -53,37 +53,37 @@ activitiesRouter.post("/", requireUser, async (req, res, next) => {
   }
 });
 // PATCH /api/activities/:activityId
-activitiesRouter.patch('/:activityId', requireUser, async (req, res, next) => {
+activitiesRouter.patch('/:activityId',  async (req, res, next) => {
     const { activityId } = req.params;
     console.log(req.params)
-    const { name, description } = req.body;
-
-    const updateFields = {};
-
-    if (name) {
-        updateFields.name = name;
-    }
-
-
-    if (description) {
-        updateFields.description = description;
-    } 
-
+    const fields = req.body;
     try {
         const originalActivity = await getActivityById(activityId);
+        
+        if (originalActivity) 
+    
+      {const updatedActivity = await updateActivity({id:activityId, ...fields});
+            if (updatedActivity.name === originalActivity.name){ 
+              next ({
+                    name: 'Name duplicate',
+                    message: `An activity with name ${help} already exists`,
+                    error: "error"
+              }) } else {
+            res.send(updatedActivity)}
 
-        if (originalActivity.activityId) {
 
-            const updatedActivity = await updateActivity(activityId, updateFields);
-            res.send({activity: updatedActivity})
-        } else {
+        } 
+         else {
             next ({
-                name: 'UnauthorizedUserError',
-                message: 'You cannot update a activity that is not yours'
+                name: 'Activity does not exist',
+                message: `Activity ${activityId} not found`,
+                error: "error"
             })
         }
-    } catch ({ name, message}) {
-        next ({name, message});
+       
+    
+    } catch ({ name, message, error}) {
+        next ({name, message, error});
     }
 });
 
