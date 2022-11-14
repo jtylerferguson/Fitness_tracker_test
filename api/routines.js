@@ -10,7 +10,7 @@ const {
 } = require("../db/routines.js");
 const { addActivityToRoutine } = require("../db/routine_activities.js");
 const { getRoutineActivitiesByRoutine } = require("../db");
-const e = require("express");
+
 // GET /api/routines
 routinesRouter.get("/", async (req, res, next) => {
   try {

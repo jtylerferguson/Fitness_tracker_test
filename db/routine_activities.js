@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-catch */
 const client = require('./client')
-const {getRoutineById, createActivity}  = require("./");
+
 
 
 async function getRoutineActivityById(id)
@@ -69,7 +69,7 @@ async function updateRoutineActivity({ id, ...fields }) {
       `, Object.values(fields));
     }
   
-    if (duration === undefined) {
+    if (duration || count === undefined) {
       return await getRoutineActivityById(id);
     }
   
