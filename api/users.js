@@ -1,4 +1,3 @@
-
 const express = require('express');
 const userRouter = express.Router();
 const { getUserByUsername, createUser } = require("../db/users.js");
@@ -22,9 +21,9 @@ userRouter.post("/login", async (req, res, next) => {
   
     try {
       const user = await getUserByUsername(username);
-
+      
       if (user && user.password == password) {
-                const token = jwt.sign(
+        const token = jwt.sign(
           { id: user.id, username: user.username },
           JWT_SECRET,
           { expiresIn: "7d" }
@@ -44,6 +43,7 @@ userRouter.post("/login", async (req, res, next) => {
     
       return user 
     } catch (error) {
+      console.log(error);
       next(error);
     }
   });
@@ -51,13 +51,16 @@ userRouter.post("/login", async (req, res, next) => {
 userRouter.post("/register", async (req, res, next) => {
  
     const { username, password } = req.body;
+  
     try {
       if (password.length < 8) {
         next({
           name: "Password Short",
           message: "Password Too Short!",
           error: "error"
+          
         });}
+
 
       const _user = await getUserByUsername(username);
   
@@ -69,14 +72,14 @@ userRouter.post("/register", async (req, res, next) => {
           
         });
       } else {
-
-
+  
       const user = await createUser({
         username,
         password,
       });
-
     
+
+
       const token = jwt.sign(
         {
           id: user.id,
@@ -88,13 +91,13 @@ userRouter.post("/register", async (req, res, next) => {
         }
       );
     
+   
       res.send({
         message: "thank you for signing up",
         token,
         user
       });
     }
-
     } catch ({ name, message, error }) {
       next({ name, message, error });
     }
